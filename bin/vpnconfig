@@ -4,6 +4,8 @@ require 'optparse'
 require 'methadone'
 require 'vpnconfig.rb'
 require 'yaml'
+require 'nokogiri'
+require 'vpnconfig'
 
 class App
   include Methadone::Main
@@ -11,11 +13,9 @@ class App
 
 # the main block
   main do |vpn_conf, output_path|
-
-    # your program code here
-    # You can access CLI options via
-    # the options Hash
-
+    # TODO: When this is actually doing the API call as well should be able to stop saving the xml file and just return it instead
+    input_config = YAML.load_file(vpn_conf)
+    Vpnconfig::Generator.new.generate_xml(input_config, output_path)
   end
 
   # supplemental methods here

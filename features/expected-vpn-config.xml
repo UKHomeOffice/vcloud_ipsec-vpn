@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<GatewayIpsecVpnService>
+  <IsEnabled>true</IsEnabled>
+  <Tunnel>
+    <Name>MyVPNName</Name>
+    <Description/>
+    <IpsecVpnThirdPartyPeer>
+      <PeerId>10.10.10.1</PeerId>
+    </IpsecVpnThirdPartyPeer>
+    <PeerIpAddress>10.10.10.1</PeerIpAddress>
+    <PeerId>10.10.10.1</PeerId>
+    <LocalIpAddress>80.10.10.1</LocalIpAddress>
+    <LocalId>80.10.10.1</LocalId>
+    <LocalSubnet>
+      <Name>LocalSubnetNameHere</Name>
+      <Gateway>10.80.2.0</Gateway>
+      <Netmask>255.255.255.1</Netmask>
+    </LocalSubnet>
+    <PeerSubnet>
+      <Name>PeerSubnetNameHere</Name>
+      <Gateway>10.80.2.1</Gateway>
+      <Netmask>255.255.255.1</Netmask>
+    </PeerSubnet>
+    <SharedSecret>itsasecret</SharedSecret>
+    <SharedSecretEncrypted>false</SharedSecretEncrypted>
+    <EncryptionProtocol>AES256</EncryptionProtocol>
+    <Mtu>1500</Mtu>
+    <IsEnabled>true</IsEnabled>
+    <IsOperational>false</IsOperational>
+  </Tunnel>
+</GatewayIpsecVpnService>

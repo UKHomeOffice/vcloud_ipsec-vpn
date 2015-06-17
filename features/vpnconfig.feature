@@ -11,5 +11,5 @@ Feature: Create XML to configure a VPN
       |vpn_conf|
 
   Scenario: Happy path
-    When I successfully run "vpnconfig file:///vpnconfig.yaml /tmp/vpnconfig"
+    When I successfully run "vpnconfig ../../features/vpn-configuration-example.yaml /tmp/vpnconfig"
     Then a valid XML file should be generated
