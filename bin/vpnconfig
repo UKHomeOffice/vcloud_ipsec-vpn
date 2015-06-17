@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'methadone'
+require 'vpnconfig.rb'
+require 'yaml'
+
+class App
+  include Methadone::Main
+  include Methadone::CLILogging
+
+# the main block
+  main do |vpn_conf, output_path|
+
+    # your program code here
+    # You can access CLI options via
+    # the options Hash
+
+  end
+
+  # supplemental methods here
+
+  # Declare command-line interface here
+
+  description "Generates XML to configure a VPN, based on a yaml file"
+  #
+  # Accept flags via:
+  # on("--flag VAL","Some flag")
+  # options[flag] will contain VAL
+  #
+  # Specify switches via:
+  # on("--[no-]switch","Some switch")
+  #
+  # Or, just call OptionParser methods on opts
+  #
+  # Require an argument
+  arg :vpn_conf, "path to the yaml file containing the vpn config details"
+  arg :output_path, "path to output xml file to"
+  #
+  # # Make an argument optional
+  # arg :optional_arg, :optional
+
+  version Vpnconfig::VERSION
+
+  use_log_level_option :toggle_debug_on_signal => 'USR1'
+
+  go!
+end
