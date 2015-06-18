@@ -30,5 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rake')
   spec.add_dependency('methadone', '~> 1.9.1')
   spec.add_dependency('nokogiri', '~> 1.6.6.2')
+  spec.add_dependency('diffy', '~> 3.0.7')
   spec.add_development_dependency('test-unit')
 end

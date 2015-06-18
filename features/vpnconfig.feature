@@ -9,7 +9,3 @@ Feature: Create XML to configure a VPN
     And the banner should document that this app takes options
     And the banner should document that this app's arguments are:
       |vpn_conf|
-
-  Scenario: Happy path
-    When I successfully run "vpnconfig ../../features/vpn-configuration-example.yaml /tmp/vpnconfig"
-    Then a valid XML file should be generated
