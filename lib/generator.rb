@@ -2,7 +2,6 @@ require "vpnconfig/version"
 
 module Vpnconfig
   class Generator
-  # TODO: When this is actually doing the API call as well should be able to stop saving the xml file and just return it instead
   def generate_xml(input_config)
       xml = Nokogiri::XML::Builder.new do |xml|
         xml.GatewayIpsecVpnService {
@@ -36,10 +35,6 @@ module Vpnconfig
           }
         }
       end
-
-      output_file = File.new "/tmp/vpn-config.xml", "w"
-      output_file.puts xml.to_xml
-      output_file.close
 
       xml.to_xml
     end

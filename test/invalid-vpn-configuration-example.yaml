@@ -1,0 +1,12 @@
+name: MyVPNName
+peerIp: 10.10.10.1
+iShouldntBeHere: CatchMeIfYouCan
+localIp: 80.10.10.1
+localSubnet:
+  name: LocalSubnetNameHere
+  gateway: 10.80.2.0
+  netmask: 255.255.255.1
+peerSubnet:
+  name: PeerSubnetNameHere
+  gateway: 10.80.2.1
+sharedSecret: itsasecret
