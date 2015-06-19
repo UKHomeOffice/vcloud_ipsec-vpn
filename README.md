@@ -1,11 +1,7 @@
 # Vpnconfig
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/vpnconfig`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A command line tool to allow use of a yaml VPN configuration file to push this config to Skyscape
 
 ## Installation
-
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -14,15 +10,31 @@ gem 'vpnconfig'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
     $ gem install vpnconfig
 
 ## Usage
+Run with option --help to show command line help.
 
-TODO: Write usage instructions here
+Example command line:
+vpnconfig -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
+
+Example yaml input:
+name: MyVPNName
+peerIp: 10.10.10.1
+localIp: 80.10.10.1
+localSubnet:
+  name: LocalSubnetNameHere
+  gateway: 10.80.2.0
+  netmask: 255.255.255.1
+peerSubnet:
+  name: PeerSubnetNameHere
+  gateway: 10.80.2.1
+  netmask: 255.255.255.1
+sharedSecret: itsasecret
 
 ## Development
 
@@ -32,7 +44,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/vpnconfig/fork )
+1. Fork it ( https://github.com/UKHomeOffice/vcloud_ipec-vpn/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

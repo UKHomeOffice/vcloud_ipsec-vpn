@@ -9,13 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Tim Gent"]
   spec.email         = ["tim.gent@gmail.com"]
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com' to prevent pushes to rubygems.org, or delete to allow pushes to any server."
-  end
-
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "A command line tool to allow use of a yaml VPN configuration file to push this config to Skyscape"
+  spec.description   = ""
+  spec.homepage      = "https://github.com/UKHomeOffice/vcloud_ipec-vpn"
   spec.license       = "apache"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
@@ -28,9 +24,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rdoc')
   spec.add_development_dependency('aruba')
   spec.add_development_dependency('rake')
+  spec.add_development_dependency('test-unit')
   spec.add_dependency('methadone', '~> 1.9.1')
   spec.add_dependency('nokogiri', '~> 1.6.6.2')
   spec.add_dependency('diffy', '~> 3.0.7')
   spec.add_dependency('kwalify', '~> 0.7.2')
-  spec.add_development_dependency('test-unit')
 end

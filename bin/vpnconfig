@@ -20,15 +20,12 @@ class App
   main do
     api = Vpnconfig::API.new
     self.check_mandatory_inputs
-    unless options['w'].nil?
+    if !options['w'].nil?
       input_config = YAML.load_file(options['w'])
       errors = Vpnconfig::Validator.new.validate_yaml(input_config)
 
       if !errors.empty?
-        errors.each{|e| puts "#{e.message}"}
-        puts 'The schema to match against is:'
-        pp YAML.load_file('./lib/vpn-configuration-schema.yaml')
-        Kernel.abort('ERROR: Invalid yaml input does not match the schema, see errors above.')
+        display_errors_and_abort(errors)
       end
     end
 
@@ -44,12 +41,11 @@ class App
 
     unless options['w'].nil?
       puts 'Reading in your yaml file...'
-      vpn_conf = options['write']
 
       puts 'Generating XML...'
       new_config = Vpnconfig::Generator.new.generate_xml(input_config)
 
-      if new_config.delete(' ').lines.drop(1).join() == current_config.delete(' ') #Comparison removes xml standard line and whitespaces to ensure accurate comparison
+      if configs_match(current_config, new_config)
         puts 'Old and new configuration are identical, no changes to make'
       else
         puts 'Please confirm you would like to write the new configuration (y/n)'
@@ -67,7 +63,7 @@ class App
 
   end
 
-# supplemental methods here
+# Supplemental methods
   def self.check_mandatory_inputs
     if options['d'].nil?
       Kernel.abort('You must define a datacentre')
@@ -86,26 +82,24 @@ class App
     file.close
   end
 
-# Declare command-line interface here
+  def self.display_errors_and_abort(errors)
+    errors.each{|e| puts "#{e.message}"}
+    puts 'The schema to match against is:'
+    pp YAML.load_file('./lib/vpn-configuration-schema.yaml')
+    Kernel.abort('ERROR: Invalid yaml input does not match the schema, see errors above.')
+  end
 
-  description "Generates XML to configure a VPN, based on a yaml file"
-#
-# Accept flags via:
-# on("--flag VAL","Some flag")
-# options[flag] will contain VAL
+  def self.configs_match(current_config, new_config)
+    new_config.delete(' ').lines.drop(1).join() == current_config.delete(' ')
+  end
+
+
+# Command line interface details
+  description "Updates VPN configuration for given datacentre based on a yaml input file"
+
   on("-w VAL", "--write", "Writes configuration to the VDC as per specified XML file")
   on("-d VAL", "--datacentre", "Name of the skyscape datacentre")
   on("-u VAL", "--user", "Username to connect to the Skyscape Datacenter(check API tab)")
-#
-# Specify switches via:
-# on("--[no-]switch","Some switch")
-#
-# Or, just call OptionParser methods on opts
-#
-# Require an argument
-#
-# # Make an argument optional
-# arg :optional_arg, :optional
 
   version Vpnconfig::VERSION
 
