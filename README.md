@@ -19,8 +19,11 @@ Or install it yourself as:
 ## Usage
 Run with option --help to show command line help.
 
-Example command line:
+Example command line with gem installed:
 vpnconfig -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
+
+Example command line if you have cloned the repository without installing as a gem:
+bundle exec ./bin/vpnconfig -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
 
 Example yaml input:
 name: MyVPNName
