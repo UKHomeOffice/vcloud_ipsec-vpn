@@ -24,7 +24,7 @@ class App
     dc_details = api.get_dc_details(conn, options['d'])
     puts 'Found data centre: '+dc_details['name']
     puts 'Reading configuration....'
-    current_config = api.read_edgegw_config(dc_details, conn).to_s
+    current_config, edgegw_href = api.read_edgegw_config(dc_details, conn)
     puts 'Current configuration is:'
     puts current_config
     puts
@@ -37,25 +37,17 @@ class App
       puts 'Generating XML...'
       new_config = Vpnconfig::Generator.new.generate_xml(input_config)
 
-      puts '---------------------------'
-      puts '---------------------------'
-      puts '---------------------------'
-      puts current_config.delete(' ')
-
-      puts 'are they equal?'
-      puts (current_config.delete(' ') == new_config.delete(' '))
-
-
-      if new_config == current_config
+      if new_config.delete(' ').lines.drop(1).join() == current_config.delete(' ') #Comparison removes xml standard line and whitespaces to ensure accurate comparison
         puts 'Old and new configuration are identical, no changes to make'
       else
         puts 'Please confirm you would like to write the new configuration (y/n)'
         confirmation = STDIN.gets
-        puts 'confirmation is '+confirmation
-        puts confirmation =~ /^y/
         if confirmation.downcase =~ /^y/
+          bkp_config_file = "backup/#{options['d']}_GatewayIpsecVpnService.xml"
+          puts 'Backing up existing config to: '+bkp_config_file
+          self.save_config(current_config, bkp_config_file)
           puts 'Posting new configuration to skyscape...'
-          Vpnconfig::API.new.post_to_api(new_config)
+          Vpnconfig::API.new.post_to_api(edgegw_href, conn, new_config)
           'New config has been written to Skyscape'
         end
       end
@@ -74,6 +66,12 @@ class App
     unless options['w'].nil?
       # TODO: Validate yaml meets expectation here
     end
+  end
+
+  def self.save_config(xml_obj,filename)
+    file = File.open(filename, "w")
+    xml_obj.write_xml_to(file, options={})
+    file.close
   end
 
 # Declare command-line interface here

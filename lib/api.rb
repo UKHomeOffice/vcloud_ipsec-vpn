@@ -13,12 +13,12 @@ module Vpnconfig
       #Get edge gateway config
       puts 'Getting config of edge gateways'
       edgegw_configs = get_edgegw_configs(edgegw_details, dc, conn)
-      edgegw_configs
+      return edgegw_configs.to_s, edgegw_details.at('EdgeGatewayRecord')['href']
     end
 
-    def post_to_api(xml)
+    def post_to_api(href, conn, config)
       puts 'About to post some stuff to the API....'
-      puts xml
+      push_config(href, conn['auth_token'], config)
     end
 
     def get_edgegw_configs(edgegw_details, dc, conn)
@@ -85,6 +85,32 @@ module Vpnconfig
       rescue Exception => e
         puts "Error fetching the object #{object_name}, URL: #{href}"
         puts e
+      end
+    end
+
+    def push_config(href,token,config)
+      href = href + "/action/configureServices"
+      body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<EdgeGatewayServiceConfiguration xmlns=\"http://www.vmware.com/vcloud/v1.5\">
+#{config.to_s}
+</EdgeGatewayServiceConfiguration>"
+
+      uri = URI.parse(href)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Post.new(uri.request_uri, { 'Accept' => 'application/*+xml;version=5.5', 'x-vcloud-authorization' => token })
+      request.body = body
+      request.content_type = 'application/vnd.vmware.admin.edgeGatewayServiceConfiguration+xml'
+
+
+      response = http.request(request)
+      if response.code.to_i == 202
+        puts "SUCCESS"
+      else
+        puts "Unexpected exit code"
+        puts response.code
+        puts response.body
       end
     end
   end
