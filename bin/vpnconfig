@@ -44,6 +44,9 @@ class App
 
       puts 'Generating XML...'
       new_config = Vpnconfig::Generator.new.generate_xml(input_config)
+      puts 'Generated XML is:'
+      puts new_config
+      puts
 
       if configs_match(current_config, new_config)
         puts 'Old and new configuration are identical, no changes to make'
@@ -71,6 +74,12 @@ class App
     unless options['w'].nil?
       # TODO: Validate yaml meets expectation here
     end
+  end
+
+  def self.save_config(xml_obj, filename)
+    file = File.open(filename, "w")
+    xml_obj.write_xml_to(file, options={})
+    file.close
   end
 
   def self.display_errors_and_abort(errors)

@@ -4,9 +4,6 @@ module Vpnconfig
   class Generator
   def generate_xml(input_configs)
 
-    puts 'input_configs looks like this:'
-    puts input_configs
-
       xml = Nokogiri::XML::Builder.new do |xml|
         xml.GatewayIpsecVpnService {
           xml.IsEnabled true
