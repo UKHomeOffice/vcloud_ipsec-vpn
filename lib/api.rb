@@ -1,4 +1,4 @@
-require "vpnconfig/version"
+require "vcloud_ipsec-vpn/version"
 
 module Vpnconfig
   class Api

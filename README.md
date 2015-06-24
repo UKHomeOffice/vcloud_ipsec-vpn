@@ -5,7 +5,7 @@ A command line tool to allow use of a yaml VPN configuration file to push this c
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'vpnconfig'
+gem 'vcloud_ipsec-vpn'
 ```
 
 And then execute:
@@ -14,7 +14,10 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install vpnconfig
+    $ gem install vcloud_ipsec-vpn
+    
+Require it in your ruby code using:
+require 'vpnconfig'
 
 ## Usage
 Run with option --help to show command line help.

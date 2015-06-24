@@ -10,8 +10,8 @@ Before do
   @original_rubylib = ENV['RUBYLIB']
   ENV['RUBYLIB'] = LIB_DIR + File::PATH_SEPARATOR + ENV['RUBYLIB'].to_s
   # Set up temporary location to put the generated xml
-  FileUtils.rm_rf "/tmp/vpnconfig"
-  FileUtils.mkdir "/tmp/vpnconfig"
+  FileUtils.rm_rf "/tmp/vcloud_ipsec-vpn"
+  FileUtils.mkdir "/tmp/vcloud_ipsec-vpn"
 end
 
 After do

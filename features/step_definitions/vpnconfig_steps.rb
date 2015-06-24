@@ -11,7 +11,7 @@ Then(/^a valid XML file should be generated$/) do
   expected_content = Nokogiri::XML(expected_file)
   expected_file.close
 
-  actual_file = File.open("/tmp/vpnconfig/vpn-config.xml")
+  actual_file = File.open("/tmp/vcloud_ipsec-vpn/vpn-config.xml")
   actual_content = Nokogiri::XML(actual_file)
   actual_file.close
 
