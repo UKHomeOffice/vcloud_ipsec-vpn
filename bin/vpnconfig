@@ -61,6 +61,7 @@ class App
 
   end
 
+# Supplemental methods
   def self.validate_yaml_if_present(yaml_path)
     if !yaml_path.nil?
       input_config = YAML.load_file(yaml_path)
@@ -76,7 +77,8 @@ class App
   def self.backup_current_config(current_config, backup_path, datacentre)
     puts 'Creating backup of current configuration...' if @verbose
     filename = Time.now.strftime("%Y%m%d%H%M%S") + '_' + datacentre + '_VPN_Config'
-    filepath = backup_path + '/' + filename
+    backup_path = backup_path + '/' if backup_path[-1] != '/'
+    filepath = backup_path + filename
     unless File.directory?(filepath)
       FileUtils.mkdir_p(backup_path)
       puts 'Created directory for backup' if @verbose
@@ -85,7 +87,6 @@ class App
     puts "Created backup file at: #{filepath}" if @verbose
   end
 
-# Supplemental methods
   def self.report_task_status(task_href, conn)
     completed_task = @api.get_completed_task(task_href, conn)
     if completed_task['status'] == 'success'
