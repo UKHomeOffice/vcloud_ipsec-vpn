@@ -51,9 +51,6 @@ class App
         puts 'Please confirm you would like to write the new configuration (y/n)'
         confirmation = STDIN.gets
         if confirmation.downcase =~ /^y/
-          bkp_config_file = "backup/#{options['d']}_GatewayIpsecVpnService.xml"
-          puts 'Backing up existing config to: '+bkp_config_file
-          self.save_config(current_config, bkp_config_file)
           puts 'Posting new configuration to skyscape...'
           Vpnconfig::API.new.post_to_api(edgegw_href, conn, new_config)
           'New config has been written to Skyscape'
@@ -74,12 +71,6 @@ class App
     unless options['w'].nil?
       # TODO: Validate yaml meets expectation here
     end
-  end
-
-  def self.save_config(xml_obj, filename)
-    file = File.open(filename, "w")
-    xml_obj.write_xml_to(file, options={})
-    file.close
   end
 
   def self.display_errors_and_abort(errors)
