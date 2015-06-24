@@ -5,8 +5,8 @@ module Vpnconfig
     def login(username)
       print "Enter Password for user #{username}: "
       password = STDIN.noecho(&:gets).chomp
-      puts ''
-      puts 'Getting connection string...'
+      puts '' if @verbose
+      puts 'Getting connection string...' if @verbose
       conn = get_conn_string(username, password)
       conn
     end

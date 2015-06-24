@@ -20,32 +20,33 @@ class App
 # the main block
   main do
     @api = Vpnconfig::Api.new
+    @verbose = !options['v'].nil?
     self.check_mandatory_inputs
     input_config = self.validate_yaml_if_present(options['w'])
 
-    puts 'Logging in'
+    puts 'Logging in' if @verbose
     conn = Vpnconfig::Login.new.login(options['u'])
+    puts "\nReading configuration...."
     dc_details = @api.get_dc_details(conn, options['d'])
-    puts 'Found data centre: '+dc_details['name']
-    puts 'Reading configuration....'
+    puts 'Found data centre: '+dc_details['name'] if @verbose
     current_config, edgegw_href = @api.read_edgegw_config(dc_details, conn)
 
     unless options['b'].nil?
       self.backup_current_config(current_config, options['b'], options['d'])
     end
 
-    puts 'Current configuration is:'
-    puts current_config
-    puts
+    puts 'Current configuration is:' if @verbose
+    puts current_config if @verbose
+    puts if @verbose
 
     unless options['w'].nil?
-      puts 'Reading in your yaml file...'
+      puts 'Reading in your yaml file...' if @verbose
 
-      puts 'Generating XML...'
+      puts 'Generating XML...' if @verbose
       new_config = Vpnconfig::Generator.new.generate_xml(input_config)
-      puts 'Generated XML is:'
-      puts new_config
-      puts
+      puts 'Generated XML is:' if @verbose
+      puts new_config if @verbose
+      puts if @verbose
 
       if configs_match(current_config, new_config)
         puts 'Old and new configuration are identical, no changes to make'
@@ -53,9 +54,10 @@ class App
         puts 'Please confirm you would like to write the new configuration (y/n)'
         confirmation = STDIN.gets
         if confirmation.downcase =~ /^y/
-          puts "Posting new configuration to skyscape, href: #{edgegw_href}..."
+          puts "Posting new configuration to skyscape"
+          puts "href: #{edgegw_href}..." if @verbose
           task_href = @api.post_to_api(edgegw_href, conn, new_config)
-          puts 'Task has been created to update config, tracking progress....'
+          puts 'Task has been created to update config, tracking progress....' if @verbose
           report_task_status(task_href, conn)
         end
       end
@@ -76,15 +78,15 @@ class App
   end
 
   def self.backup_current_config(current_config, backup_path, datacentre)
-    puts 'Creating backup of current configuration...'
+    puts 'Creating backup of current configuration...' if @verbose
     filename = Time.now.strftime("%Y%m%d%H%M%S") + '_' + datacentre + '_VPN_Config'
     filepath = backup_path + '/' + filename
     unless File.directory?(filepath)
       FileUtils.mkdir_p(backup_path)
+      puts 'Created directory for backup' if @verbose
     end
-    puts 'Created directory for backup'
     File.write(filepath, current_config)
-    puts "Created backup file at: #{filepath}"
+    puts "Created backup file at: #{filepath}" if @verbose
   end
 
 # Supplemental methods
@@ -133,6 +135,7 @@ class App
   on("-d VAL", "--datacentre", "Name of the skyscape datacentre")
   on("-u VAL", "--user", "Username to connect to the Skyscape Datacenter(check API tab)")
   on("-b VAL", "--backup", "Optionally specify the location to store a backup of the current configuration")
+  on("-v VAL", "--verbose", "Verbose logging")
 
   version Vpnconfig::VERSION
 

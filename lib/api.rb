@@ -18,18 +18,17 @@ module Vpnconfig
     end
 
     def read_edgegw_config(dc, conn)
-      puts 'Getting details of dcs'
+      puts 'Getting details of dcs' if @verbose
       edgegw_overviews = get_edgegw_overviews(dc, conn)
-      puts 'Getting details of edge gateways'
+      puts 'Getting details of edge gateways' if @verbose
       edgegw_details = get_edgegw_details(edgegw_overviews, dc, conn)
       #Get edge gateway config
-      puts 'Getting config of edge gateways'
+      puts 'Getting config of edge gateways' if @verbose
       edgegw_configs = get_edgegw_configs(edgegw_details, dc, conn)
       return edgegw_configs.to_s, edgegw_details.at('EdgeGatewayRecord')['href']
     end
 
     def post_to_api(href, conn, config)
-      puts 'About to post some stuff to the API....'
       task = push_config(href, conn['auth_token'], config)
       task
     end
@@ -55,7 +54,7 @@ module Vpnconfig
 
 
     def get_dc_details(conn, user_dc)
-      puts conn
+      puts conn if @verbose
       org_xml = get_xml_object(conn["org_url"], conn["auth_token"], 'Org')
       all_dcs = get_all_dcs(org_xml)
       matching_dcs = all_dcs.select { |dc| /^#{user_dc}/.match(dc['name']) || user_dc == dc['name'] }
@@ -115,7 +114,7 @@ module Vpnconfig
 
       response = http.request(request)
       if response.code.to_i == 202
-        puts "Post successful"
+        puts "Post successful" if @verbose
       else
         puts "Unexpected exit code"
         puts response.code
