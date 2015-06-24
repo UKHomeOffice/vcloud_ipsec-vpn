@@ -18,7 +18,7 @@ class App
 
 # the main block
   main do
-    api = Vpnconfig::API.new
+    api = Vpnconfig::Api.new
     self.check_mandatory_inputs
     if !options['w'].nil?
       input_config = YAML.load_file(options['w'])
@@ -55,7 +55,7 @@ class App
         confirmation = STDIN.gets
         if confirmation.downcase =~ /^y/
           puts "Posting new configuration to skyscape, href: #{edgegw_href}..."
-          Vpnconfig::API.new.post_to_api(edgegw_href, conn, new_config)
+          Vpnconfig::Api.new.post_to_api(edgegw_href, conn, new_config)
           'New config has been written to Skyscape'
         end
       end

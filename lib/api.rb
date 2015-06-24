@@ -1,9 +1,7 @@
 require "vpnconfig/version"
 
 module Vpnconfig
-  class API
-    # TODO: When this is actually doing the API call as well should be able to stop saving the xml file and just return it instead
-
+  class Api
     def read_edgegw_config(dc, conn)
       puts 'Getting details of dcs'
       edgegw_overviews = get_edgegw_overviews(dc, conn)
@@ -102,12 +100,16 @@ module Vpnconfig
       response = http.request(request)
       if response.code.to_i == 202
         puts response.body
-        puts "SUCCESS"
+        puts "Post successful"
       else
         puts "Unexpected exit code"
         puts response.code
         puts response.body
       end
+    end
+
+    def get_task_href(response_body)
+
     end
   end
 end

@@ -2,7 +2,6 @@ require "vpnconfig/version"
 
 module Vpnconfig
   class Login
-    # TODO: When this is actually doing the API call as well should be able to stop saving the xml file and just return it instead
     def login(username)
       print "Enter Password for user #{username}: "
       password = STDIN.noecho(&:gets).chomp
