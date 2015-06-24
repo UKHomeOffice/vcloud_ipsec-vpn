@@ -28,4 +28,31 @@
     <IsEnabled>true</IsEnabled>
     <IsOperational>false</IsOperational>
   </Tunnel>
+  <Tunnel>
+    <Name>MySecondVPN</Name>
+    <Description/>
+    <IpsecVpnThirdPartyPeer>
+      <PeerId>10.10.10.2</PeerId>
+    </IpsecVpnThirdPartyPeer>
+    <PeerIpAddress>10.10.10.2</PeerIpAddress>
+    <PeerId>10.10.10.2</PeerId>
+    <LocalIpAddress>80.10.10.2</LocalIpAddress>
+    <LocalId>80.10.10.2</LocalId>
+    <LocalSubnet>
+      <Name>LocalSubnetName2</Name>
+      <Gateway>10.80.2.1</Gateway>
+      <Netmask>255.255.255.2</Netmask>
+    </LocalSubnet>
+    <PeerSubnet>
+      <Name>PeerSubnetName2</Name>
+      <Gateway>10.80.2.2</Gateway>
+      <Netmask>255.255.255.2</Netmask>
+    </PeerSubnet>
+    <SharedSecret>itsasecret2</SharedSecret>
+    <SharedSecretEncrypted>false</SharedSecretEncrypted>
+    <EncryptionProtocol>AES256</EncryptionProtocol>
+    <Mtu>2000</Mtu>
+    <IsEnabled>true</IsEnabled>
+    <IsOperational>false</IsOperational>
+  </Tunnel>
 </GatewayIpsecVpnService>

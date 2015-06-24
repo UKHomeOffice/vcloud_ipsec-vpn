@@ -2,6 +2,7 @@ require 'test/unit'
 require 'methadone'
 require 'nokogiri'
 require 'generator'
+require 'diffy'
 
 class TestGenerator < Test::Unit::TestCase
   def test_xml_generation
@@ -14,6 +15,17 @@ class TestGenerator < Test::Unit::TestCase
     expected_content = Nokogiri::XML(expected_file).to_xml
     expected_file.close
 
+    puts 'generated_xml is:'
+    puts generated_xml
+    puts
+    puts 'expected_content is'
+    puts expected_content
+    puts
+    puts 'The difference is:'
+    puts Diffy::Diff.new(generated_xml, expected_content)
+    puts
+    puts 'BUT ARE THEY EQUAL.....!??!?'
+    puts generated_xml == expected_content
     assert(generated_xml == expected_content, 'Generated xml did not match the expected xml')
   end
 end

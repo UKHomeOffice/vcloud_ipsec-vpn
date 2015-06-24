@@ -1,40 +1,45 @@
-type: map
-mapping:
-  "name":
-    type: str
-    required: yes
-  "peerIp":
-    type: str
-    required: yes
-  "localIp":
-    type: str
-    required: yes
-  "localSubnet":
-    type: map
-    required: yes
-    mapping:
-      "name":
-        type: str
-        required: yes
-      "gateway":
-        type: str
-        required: yes
-      "netmask":
-        type: str
-        required: yes
-  "peerSubnet":
-    type: map
-    required: yes
-    mapping:
-      "name":
-        type: str
-        required: yes
-      "gateway":
-        type: str
-        required: yes
-      "netmask":
-        type: str
-        required: yes
-  "sharedSecret":
-    type: str
-    required: yes
+type: seq
+sequence:
+    - type: map
+      mapping:
+        "name":
+          type: str
+          required: yes
+        "peerIp":
+          type: str
+          required: yes
+        "localIp":
+          type: str
+          required: yes
+        "localSubnet":
+          type: map
+          required: yes
+          mapping:
+            "name":
+              type: str
+              required: yes
+            "gateway":
+              type: str
+              required: yes
+            "netmask":
+              type: str
+              required: yes
+        "peerSubnet":
+          type: map
+          required: yes
+          mapping:
+            "name":
+              type: str
+              required: yes
+            "gateway":
+              type: str
+              required: yes
+            "netmask":
+              type: str
+              required: yes
+        "sharedSecret":
+          type: str
+          required: yes
+        "mtu":
+          type: number
+          required: no
