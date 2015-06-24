@@ -54,7 +54,7 @@ class App
         puts 'Please confirm you would like to write the new configuration (y/n)'
         confirmation = STDIN.gets
         if confirmation.downcase =~ /^y/
-          puts 'Posting new configuration to skyscape...'
+          puts "Posting new configuration to skyscape, href: #{edgegw_href}..."
           Vpnconfig::API.new.post_to_api(edgegw_href, conn, new_config)
           'New config has been written to Skyscape'
         end

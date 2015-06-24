@@ -4,7 +4,6 @@ module Vpnconfig
   class API
     # TODO: When this is actually doing the API call as well should be able to stop saving the xml file and just return it instead
 
-
     def read_edgegw_config(dc, conn)
       puts 'Getting details of dcs'
       edgegw_overviews = get_edgegw_overviews(dc, conn)
