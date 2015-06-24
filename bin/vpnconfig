@@ -51,15 +51,11 @@ class App
       if configs_match(current_config, new_config)
         puts 'Old and new configuration are identical, no changes to make'
       else
-        puts 'Please confirm you would like to write the new configuration (y/n)'
-        confirmation = STDIN.gets
-        if confirmation.downcase =~ /^y/
-          puts "Posting new configuration to skyscape"
-          puts "href: #{edgegw_href}..." if @verbose
-          task_href = @api.post_to_api(edgegw_href, conn, new_config)
-          puts 'Task has been created to update config, tracking progress....' if @verbose
-          report_task_status(task_href, conn)
-        end
+        puts "Posting new configuration to skyscape"
+        puts "href: #{edgegw_href}..." if @verbose
+        task_href = @api.post_to_api(edgegw_href, conn, new_config)
+        puts 'Task has been created to update config, tracking progress....' if @verbose
+        report_task_status(task_href, conn)
       end
     end
 
