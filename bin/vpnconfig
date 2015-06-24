@@ -135,7 +135,7 @@ class App
   on("-d VAL", "--datacentre", "Name of the skyscape datacentre")
   on("-u VAL", "--user", "Username to connect to the Skyscape Datacenter(check API tab)")
   on("-b VAL", "--backup", "Optionally specify the location to store a backup of the current configuration")
-  on("-v VAL", "--verbose", "Verbose logging")
+  on("-v", "--verbose", "Verbose logging")
 
   version Vpnconfig::VERSION
 
