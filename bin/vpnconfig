@@ -22,10 +22,10 @@ class App
     self.check_mandatory_inputs
     if !options['w'].nil?
       input_config = YAML.load_file(options['w'])
-      errors = Vpnconfig::Validator.new.validate_yaml(input_config)
+      validation_errors = Vpnconfig::Validator.new.validate_yaml(input_config)
 
-      if !errors.empty?
-        display_errors_and_abort(errors)
+      if !validation_errors.empty?
+        display_errors_and_abort(validation_errors)
       end
     end
 
@@ -55,8 +55,9 @@ class App
         confirmation = STDIN.gets
         if confirmation.downcase =~ /^y/
           puts "Posting new configuration to skyscape, href: #{edgegw_href}..."
-          Vpnconfig::Api.new.post_to_api(edgegw_href, conn, new_config)
-          'New config has been written to Skyscape'
+          task_href = api.post_to_api(edgegw_href, conn, new_config)
+          puts 'Task has been created to update config, tracking progress....'
+          report_task_status(task_href)
         end
       end
     end
@@ -64,6 +65,17 @@ class App
   end
 
 # Supplemental methods
+  def self.report_task_status(task_href)
+    completed_task = api.get_completed_task(task_href)
+    if completed_task['status'] == 'success'
+      puts 'New config has been successfully written to Skyscape'
+    else
+      api_error_message = completed_task.at('Error')['message']
+      api_error_code= completed_task.at('Error')['majorErrorCode']
+      Kernel.abort("The task returned with status code #{api_error} and the following error: #{api_error_message}")
+    end
+  end
+
   def self.check_mandatory_inputs
     if options['d'].nil?
       Kernel.abort('You must define a datacentre')
@@ -86,7 +98,7 @@ class App
     errors.each{|e| puts "#{e.message}"}
     puts 'The schema to match against is:'
     pp YAML.load_file('./lib/vpn-configuration-schema.yaml')
-    Kernel.abort('ERROR: Invalid yaml input does not match the schema, see errors above.')
+    Kernel.abort('ERROR: Invalid yaml input does not match the schema, see validation_errors above.')
   end
 
   def self.configs_match(current_config, new_config)

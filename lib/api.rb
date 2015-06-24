@@ -2,6 +2,21 @@ require "vpnconfig/version"
 
 module Vpnconfig
   class Api
+    def get_completed_task(task_href, conn)
+      def check_task_until_completed
+        task = get_xml_object(task_href, conn['auth_token'], 'Task')
+        if task['status'] == 'running'
+          sleep 1
+          check_task_until_completed
+        else
+          task
+        end
+      end
+
+      completed_task = check_task_until_completed
+      completed_task
+    end
+
     def read_edgegw_config(dc, conn)
       puts 'Getting details of dcs'
       edgegw_overviews = get_edgegw_overviews(dc, conn)
@@ -106,10 +121,14 @@ module Vpnconfig
         puts response.code
         puts response.body
       end
+      get_task_href(response.body)
     end
 
     def get_task_href(response_body)
-
+      puts response_body
+      xml_doc  = Nokogiri::XML(response_body)
+      task = xml_doc.at_css("Task")["href"]
+      task
     end
   end
 end
