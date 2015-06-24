@@ -90,22 +90,19 @@ module Vpnconfig
 
     def push_config(href,token,config)
       href = href + "/action/configureServices"
-      body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<EdgeGatewayServiceConfiguration xmlns=\"http://www.vmware.com/vcloud/v1.5\">
-#{config.to_s}
-</EdgeGatewayServiceConfiguration>"
 
       uri = URI.parse(href)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       request = Net::HTTP::Post.new(uri.request_uri, { 'Accept' => 'application/*+xml;version=5.5', 'x-vcloud-authorization' => token })
-      request.body = body
+      request.body = config.to_s
       request.content_type = 'application/vnd.vmware.admin.edgeGatewayServiceConfiguration+xml'
 
 
       response = http.request(request)
       if response.code.to_i == 202
+        puts response.body
         puts "SUCCESS"
       else
         puts "Unexpected exit code"
