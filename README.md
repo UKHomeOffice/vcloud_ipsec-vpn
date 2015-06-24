@@ -17,16 +17,16 @@ Or install it yourself as:
     $ gem install vcloud_ipsec-vpn
     
 Require it in your ruby code using:
-require 'vpnconfig'
+require 'vcloud_ipsec-vpn'
 
 ## Usage
 Run with option --help to show command line help.
 
 Example command line with gem installed:
-vpnconfig -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
+vcloud_ipsec-vpn -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
 
 Example command line if you have cloned the repository without installing as a gem:
-bundle exec ./bin/vpnconfig -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
+bundle exec ./bin/vcloud_ipsec-vpn -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
 
 Example yaml input:
 - name: MyVPNName
