@@ -21,14 +21,7 @@ class App
   main do
     @api = Vpnconfig::Api.new
     self.check_mandatory_inputs
-    if !options['w'].nil?
-      input_config = YAML.load_file(options['w'])
-      validation_errors = Vpnconfig::Validator.new.validate_yaml(input_config)
-
-      if !validation_errors.empty?
-        display_errors_and_abort(validation_errors)
-      end
-    end
+    input_config = self.validate_yaml_if_present(options['w'])
 
     puts 'Logging in'
     conn = Vpnconfig::Login.new.login(options['u'])
@@ -70,6 +63,18 @@ class App
 
   end
 
+  def self.validate_yaml_if_present(yaml_path)
+    if !yaml_path.nil?
+      input_config = YAML.load_file(yaml_path)
+      validation_errors = Vpnconfig::Validator.new.validate_yaml(input_config)
+
+      if !validation_errors.empty?
+        display_errors_and_abort(validation_errors)
+      end
+    end
+    input_config
+  end
+
   def self.backup_current_config(current_config, backup_path, datacentre)
     puts 'Creating backup of current configuration...'
     filename = Time.now.strftime("%Y%m%d%H%M%S") + '_' + datacentre + '_VPN_Config'
@@ -100,9 +105,6 @@ class App
     end
     if options['u'].nil?
       Kernel.abort('You must provide a username')
-    end
-    unless options['w'].nil?
-      # TODO: Validate yaml meets expectation here
     end
   end
 
