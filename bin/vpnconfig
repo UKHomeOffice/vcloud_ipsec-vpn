@@ -11,6 +11,7 @@ require 'api'
 require 'login'
 require 'diffy'
 require 'pp'
+require 'fileutils'
 
 class App
   include Methadone::Main
@@ -35,6 +36,11 @@ class App
     puts 'Found data centre: '+dc_details['name']
     puts 'Reading configuration....'
     current_config, edgegw_href = @api.read_edgegw_config(dc_details, conn)
+
+    unless options['b'].nil?
+      self.backup_current_config(current_config, options['b'], options['d'])
+    end
+
     puts 'Current configuration is:'
     puts current_config
     puts
@@ -62,6 +68,18 @@ class App
       end
     end
 
+  end
+
+  def self.backup_current_config(current_config, backup_path, datacentre)
+    puts 'Creating backup of current configuration...'
+    filename = Time.now.strftime("%Y%m%d%H%M%S") + '_' + datacentre + '_VPN_Config'
+    filepath = backup_path + '/' + filename
+    unless File.directory?(filepath)
+      FileUtils.mkdir_p(backup_path)
+    end
+    puts 'Created directory for backup'
+    File.write(filepath, current_config)
+    puts "Created backup file at: #{filepath}"
   end
 
 # Supplemental methods
@@ -112,6 +130,7 @@ class App
   on("-w VAL", "--write", "Writes configuration to the VDC as per specified XML file")
   on("-d VAL", "--datacentre", "Name of the skyscape datacentre")
   on("-u VAL", "--user", "Username to connect to the Skyscape Datacenter(check API tab)")
+  on("-b VAL", "--backup", "Optionally specify the location to store a backup of the current configuration")
 
   version Vpnconfig::VERSION
 
