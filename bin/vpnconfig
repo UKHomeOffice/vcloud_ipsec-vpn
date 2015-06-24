@@ -18,7 +18,7 @@ class App
 
 # the main block
   main do
-    api = Vpnconfig::Api.new
+    @api = Vpnconfig::Api.new
     self.check_mandatory_inputs
     if !options['w'].nil?
       input_config = YAML.load_file(options['w'])
@@ -31,10 +31,10 @@ class App
 
     puts 'Logging in'
     conn = Vpnconfig::Login.new.login(options['u'])
-    dc_details = api.get_dc_details(conn, options['d'])
+    dc_details = @api.get_dc_details(conn, options['d'])
     puts 'Found data centre: '+dc_details['name']
     puts 'Reading configuration....'
-    current_config, edgegw_href = api.read_edgegw_config(dc_details, conn)
+    current_config, edgegw_href = @api.read_edgegw_config(dc_details, conn)
     puts 'Current configuration is:'
     puts current_config
     puts
@@ -55,9 +55,9 @@ class App
         confirmation = STDIN.gets
         if confirmation.downcase =~ /^y/
           puts "Posting new configuration to skyscape, href: #{edgegw_href}..."
-          task_href = api.post_to_api(edgegw_href, conn, new_config)
+          task_href = @api.post_to_api(edgegw_href, conn, new_config)
           puts 'Task has been created to update config, tracking progress....'
-          report_task_status(task_href)
+          report_task_status(task_href, conn)
         end
       end
     end
@@ -65,14 +65,14 @@ class App
   end
 
 # Supplemental methods
-  def self.report_task_status(task_href)
-    completed_task = api.get_completed_task(task_href)
+  def self.report_task_status(task_href, conn)
+    completed_task = @api.get_completed_task(task_href, conn)
     if completed_task['status'] == 'success'
       puts 'New config has been successfully written to Skyscape'
     else
       api_error_message = completed_task.at('Error')['message']
       api_error_code= completed_task.at('Error')['majorErrorCode']
-      Kernel.abort("The task returned with status code #{api_error} and the following error: #{api_error_message}")
+      Kernel.abort("The task returned with status code #{api_error_code} and the following error: #{api_error_message}")
     end
   end
 

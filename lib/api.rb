@@ -3,17 +3,17 @@ require "vpnconfig/version"
 module Vpnconfig
   class Api
     def get_completed_task(task_href, conn)
-      def check_task_until_completed
+      def check_task_until_completed(task_href, conn)
         task = get_xml_object(task_href, conn['auth_token'], 'Task')
         if task['status'] == 'running'
           sleep 1
-          check_task_until_completed
+          check_task_until_completed(task_href, conn)
         else
           task
         end
       end
 
-      completed_task = check_task_until_completed
+      completed_task = check_task_until_completed(task_href, conn)
       completed_task
     end
 
@@ -30,7 +30,8 @@ module Vpnconfig
 
     def post_to_api(href, conn, config)
       puts 'About to post some stuff to the API....'
-      push_config(href, conn['auth_token'], config)
+      task = push_config(href, conn['auth_token'], config)
+      task
     end
 
     def get_edgegw_configs(edgegw_details, dc, conn)
@@ -114,18 +115,17 @@ module Vpnconfig
 
       response = http.request(request)
       if response.code.to_i == 202
-        puts response.body
         puts "Post successful"
       else
         puts "Unexpected exit code"
         puts response.code
         puts response.body
       end
-      get_task_href(response.body)
+      task = get_task_href(response.body)
+      task
     end
 
     def get_task_href(response_body)
-      puts response_body
       xml_doc  = Nokogiri::XML(response_body)
       task = xml_doc.at_css("Task")["href"]
       task
