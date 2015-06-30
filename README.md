@@ -29,6 +29,7 @@ Example command line if you have cloned the repository without installing as a g
 bundle exec ./bin/vcloud_ipsec-vpn -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
 
 Example yaml input is provided in test/vpn-configuration-example.yaml
+
 The yaml schema is provided in lib/vpn-configuration-schema.yaml
 
 ## Development
