@@ -28,32 +28,8 @@ vcloud_ipsec-vpn -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
 Example command line if you have cloned the repository without installing as a gem:
 bundle exec ./bin/vcloud_ipsec-vpn -d DataCentre1 -u JohnSmith -w vpn-configuration.yaml
 
-Example yaml input:
-- name: MyVPNName
-  peerIp: 10.10.10.1
-  localIp: 80.10.10.1
-  localSubnet:
-    name: LocalSubnetNameHere
-    gateway: 10.80.2.0
-    netmask: 255.255.255.1
-  peerSubnet:
-    name: PeerSubnetNameHere
-    gateway: 10.80.2.1
-    netmask: 255.255.255.1
-  sharedSecret: itsasecret
-- name: MySecondVPN
-  peerIp: 10.10.10.2
-  localIp: 80.10.10.2
-  localSubnet:
-    name: LocalSubnetName2
-    gateway: 10.80.2.1
-    netmask: 255.255.255.2
-  peerSubnet:
-    name: PeerSubnetName2
-    gateway: 10.80.2.2
-    netmask: 255.255.255.2
-  sharedSecret: itsasecret2
-  mtu: 2000
+Example yaml input is provided in test/vpn-configuration-example.yaml
+The yaml schema is provided in lib/vpn-configuration-schema.yaml
 
 ## Development
 
