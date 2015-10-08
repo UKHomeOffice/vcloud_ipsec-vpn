@@ -1,4 +1,8 @@
 require "vcloud_ipsec-vpn/version"
+require "io/console"
+require "URI"
+require "net/http"
+require "openssl"
 
 module Vpnconfig
   class Login
@@ -21,7 +25,8 @@ module Vpnconfig
         request.basic_auth(username, password)
         response = http.request(request)
         auth = response['x-vcloud-authorization'].to_s
-        if auth.nil? || auth.length != 44
+        print auth
+        if auth.nil?
           puts "there is something wrong with the auth token: #{auth}"
         end
       rescue Exception => e
